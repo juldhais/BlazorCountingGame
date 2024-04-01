@@ -1,0 +1,49 @@
+.monkey {
+    font-size: 60px;
+    text-align: center;
+}
+
+.choice {
+    font-size: 60px;
+    cursor: pointer;
+}
+
+@keyframes shake {
+
+    0%, 100% {
+        transform: translateX(0);
+    }
+
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-10px);
+    }
+
+    20%, 40%, 60%, 80% {
+        transform: translateX(10px);
+    }
+}
+
+.shake {
+    animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+    color: darkred;
+}
+
+@keyframes jump {
+
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateY(-10px);
+    }
+
+    20%, 40%, 60%, 80% {
+        transform: translateY(0);
+    }
+}
+
+.jump {
+    animation: jump 1s ease;
+    color: green;
+}

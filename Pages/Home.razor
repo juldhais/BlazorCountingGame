@@ -1,0 +1,106 @@
+﻿@page "/"
+
+<PageTitle>Monkey Count - juldhais.net</PageTitle>
+
+<div class="mx-5 my-5">
+    <div class="display-1 mb-5 text-center">How many monkeys are there?</div>
+
+    <div style="height:330px">
+        <div class="row row-cols-3">
+            @for (int i = 0; i < count; i++)
+            {
+                <div class="col monkey @animationClass">🙉</div>
+            }
+        </div>
+    </div>
+
+    <div class="row">
+        @foreach (var choice in choices)
+        {
+            <div class="col-4 text-center border py-3 choice" @onclick="(() => CheckAnswer(choice))">
+                <div id="choice-@choice" class="@GetAnimationClass(choice)">
+                    @choice
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@code {
+    int count;
+    List<int> choices = [];
+    string animationClass = "";
+    int? selectedChoice = null;
+
+    protected override void OnInitialized()
+    {
+        NextQuestion();
+    }
+
+    void NextQuestion()
+    {
+        // generate random number
+        count = Random.Shared.Next(1, 10);
+
+        choices.Clear();
+
+        // add count to choices
+        choices.Add(count);
+
+        // add 2 more unique random number to choices
+        while (choices.Count < 3)
+        {
+            int choice = Random.Shared.Next(1, 9);
+
+            if (!choices.Contains(choice))
+            {
+                choices.Add(choice);
+            }
+        }
+
+        // shuffle the choices using Fisher-Yates algorithm
+        var n = choices.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = Random.Shared.Next(n + 1);
+            int value = choices[k];
+            choices[k] = choices[n];
+            choices[n] = value;
+        }
+    }
+
+    async void CheckAnswer(int choice)
+    {
+        await TriggerAnimation(choice);
+
+        if (choice == count)
+        {
+            NextQuestion();
+            StateHasChanged();
+        }
+    }
+
+    async Task TriggerAnimation(int choice)
+    {
+        // prevent overlapping animation
+        if (selectedChoice != null) return;
+
+        selectedChoice = choice;
+
+        animationClass = selectedChoice == count ? "jump" : "shake";
+
+        await Task.Delay(1500);
+
+        animationClass = "";
+
+        selectedChoice = null;
+    }
+
+    string GetAnimationClass(int choice)
+    {
+        return selectedChoice == choice ? animationClass : "";
+    }
+}
+
