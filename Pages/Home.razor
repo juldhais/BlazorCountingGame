@@ -18,7 +18,7 @@
         @foreach (var choice in choices)
         {
             <div class="col-4 text-center border py-3 choice" @onclick="(() => CheckAnswer(choice))">
-                <div id="choice-@choice" class="@GetAnimationClass(choice)">
+                <div class="@GetAnimationClass(choice)">
                     @choice
                 </div>
             </div>
@@ -77,8 +77,9 @@
         if (choice == count)
         {
             NextQuestion();
-            StateHasChanged();
         }
+
+        StateHasChanged();
     }
 
     async Task TriggerAnimation(int choice)
@@ -90,7 +91,7 @@
 
         animationClass = selectedChoice == count ? "jump" : "shake";
 
-        await Task.Delay(1500);
+        await Task.Delay(1000);
 
         animationClass = "";
 
